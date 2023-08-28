@@ -9,4 +9,6 @@ public interface UserRepository {
   User read(Long userId);
 
   User readByLogin(String login);
+
+  boolean isExists(String login);
 }

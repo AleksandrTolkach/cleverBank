@@ -20,6 +20,7 @@ public class AccountMapper implements RowMapper<Account> {
         .createdAt(resultSet.getObject("created_at", LocalDateTime.class))
         .updatedAt(resultSet.getObject("updated_at", LocalDateTime.class))
         .title(resultSet.getString("title"))
+        .bankId(resultSet.getLong("bank_id"))
         .sum(resultSet.getLong("sum"))
         .build();
   }

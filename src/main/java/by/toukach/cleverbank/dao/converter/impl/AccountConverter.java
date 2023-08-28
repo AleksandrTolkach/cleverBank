@@ -18,6 +18,7 @@ public class AccountConverter implements Converter<AccountDto, Account> {
         .createdAt(entity.getCreatedAt())
         .updatedAt(entity.getUpdatedAt())
         .title(entity.getTitle())
+        .bankId(entity.getBankId())
         .sum(entity.getSum())
         .build();
   }
@@ -29,6 +30,7 @@ public class AccountConverter implements Converter<AccountDto, Account> {
         .createdAt(dto.getCreatedAt())
         .updatedAt(dto.getUpdatedAt())
         .title(dto.getTitle())
+        .bankId(dto.getBankId())
         .sum(dto.getSum())
         .build();
   }
