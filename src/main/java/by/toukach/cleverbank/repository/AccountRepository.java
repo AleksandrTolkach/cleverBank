@@ -10,4 +10,6 @@ public interface AccountRepository {
   Account read(Long id);
 
   List<Account> readByUserId(Long userId);
+
+  Account update(Account account);
 }

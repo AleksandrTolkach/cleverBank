@@ -5,11 +5,11 @@ import by.toukach.cleverbank.dao.converter.Converter;
 import by.toukach.cleverbank.dao.converter.impl.UserConverter;
 import by.toukach.cleverbank.dto.AccountDto;
 import by.toukach.cleverbank.dto.UserDto;
-import by.toukach.cleverbank.exception.UserNotFoundException;
 import by.toukach.cleverbank.repository.UserRepository;
 import by.toukach.cleverbank.repository.impl.UserRepositoryImpl;
 import by.toukach.cleverbank.service.AccountService;
 import by.toukach.cleverbank.service.UserService;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
@@ -28,6 +28,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public UserDto create(UserDto userDto) {
+    userDto.setCreatedAt(LocalDateTime.now());
     User user = userRepository.create(userConverter.toEntity(userDto));
     return userConverter.toDto(user);
   }
@@ -52,6 +53,11 @@ public class UserServiceImpl implements UserService {
         .toList();
     userDto.setAccountIdList(accountIdList);
     return userDto;
+  }
+
+  @Override
+  public boolean isExists(String login) {
+    return userRepository.isExists(login);
   }
 
   public static UserService getInstance() {

@@ -4,12 +4,13 @@ import by.toukach.cleverbank.dao.User;
 import by.toukach.cleverbank.dao.mapper.RowMapper;
 import by.toukach.cleverbank.dao.mapper.impl.UserMapper;
 import by.toukach.cleverbank.exception.DBException;
-import by.toukach.cleverbank.exception.UserNotFoundException;
+import by.toukach.cleverbank.exception.EntityNotFoundException;
 import by.toukach.cleverbank.repository.UserRepository;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import javax.sql.DataSource;
 
 public class UserRepositoryImpl implements UserRepository {
@@ -31,12 +32,13 @@ public class UserRepositoryImpl implements UserRepository {
             connection.prepareStatement(
                 "INSERT INTO application.users (created_at, login, password, "
                     + "firstname, lastname) \n"
-                    + "VALUES (now(), ?, ?, ?, ?) RETURNING id")) {
+                    + "VALUES (?, ?, ?, ?, ?) RETURNING ID")) {
 
-      statement.setString(1, user.getLogin());
-      statement.setString(2, user.getPassword());
-      statement.setString(3, user.getFirstname());
-      statement.setString(4, user.getLastname());
+      statement.setObject(1, user.getCreatedAt());
+      statement.setString(2, user.getLogin());
+      statement.setString(3, user.getPassword());
+      statement.setString(4, user.getFirstname());
+      statement.setString(5, user.getLastname());
 
       statement.execute();
 
@@ -61,6 +63,27 @@ public class UserRepositoryImpl implements UserRepository {
     return readUserIfExists("login", login);
   }
 
+  @Override
+  public boolean isExists(String login) {
+    try (Connection connection = dataSource.getConnection();
+        PreparedStatement statement =
+            connection.prepareStatement("SELECT EXISTS (SELECT 1 FROM application.users "
+                + "WHERE login = ?)")) {
+
+      statement.setString(1, login);
+
+      ResultSet resultSet = statement.executeQuery();
+
+      if (!resultSet.wasNull() && resultSet.next()) {
+        return resultSet.getBoolean(1);
+      } else {
+        throw new DBException("Не удалось выполнить запрос в базу");
+      }
+    } catch (SQLException e) {
+      throw new DBException("Не удалось выполнить запрос в базу", e);
+    }
+  }
+
   private User readUserIfExists(String argumentName, Object argumentValue) {
     try (Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement(
@@ -74,7 +97,7 @@ public class UserRepositoryImpl implements UserRepository {
       if (!resultSet.wasNull() && resultSet.next()) {
         return userRowMapper.mapRow(resultSet);
       } else {
-        throw new UserNotFoundException(String.format("Пользователь с %s %s не найден",
+        throw new EntityNotFoundException(String.format("Пользователь с %s %s не найден",
             argumentName, argumentValue));
       }
     } catch (SQLException e) {

@@ -4,11 +4,13 @@ import by.toukach.cleverbank.dao.Account;
 import by.toukach.cleverbank.dao.mapper.RowMapper;
 import by.toukach.cleverbank.dao.mapper.impl.AccountMapper;
 import by.toukach.cleverbank.exception.DBException;
+import by.toukach.cleverbank.exception.EntityNotFoundException;
 import by.toukach.cleverbank.repository.AccountRepository;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import javax.sql.DataSource;
@@ -28,12 +30,17 @@ public class AccountRepositoryImpl implements AccountRepository {
   @Override
   public Account create(Account account, Long userId) {
     try (Connection connection = dataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement(
-            "INSERT INTO application.accounts (created_at, updated_at, title, sum, user_id) "
-                + "VALUES (now(), now(), ?, ?, ?) RETURNING id")) {
-      statement.setString(1, account.getTitle());
-      statement.setLong(2, account.getSum());
-      statement.setLong(3, userId);
+        PreparedStatement statement =
+            connection.prepareStatement(
+                "INSERT INTO application.accounts (created_at, updated_at, title, bank_id, "
+                    + "sum, user_id) "
+                    + "VALUES (?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+      statement.setObject(1, account.getCreatedAt());
+      statement.setObject(2, account.getUpdatedAt());
+      statement.setString(3, account.getTitle());
+      statement.setLong(4, account.getBankId());
+      statement.setLong(5, account.getSum());
+      statement.setLong(6, userId);
 
       statement.execute();
 
@@ -58,24 +65,52 @@ public class AccountRepositoryImpl implements AccountRepository {
     return readAccountsIfExists("user_id", userId);
   }
 
-  private List<Account> readAccountsIfExists(String argumentName, Object argumentValue) {
+  @Override
+  public Account update(Account account) {
+    Long id = account.getId();
+
     try (Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement(
-            "SELECT id, created_at, updated_at, title, sum, user_id "
-                + "FROM application.accounts "
-                + "WHERE " + argumentName + "= ?")) {
+            "UPDATE application.accounts SET updated_at = ?, title = ?, sum = ? "
+                + "WHERE id = ?")) {
+      statement.setObject(1, account.getUpdatedAt());
+      statement.setString(2, account.getTitle());
+      statement.setLong(3, account.getSum());
+      statement.setLong(4, id);
+
+      int updatedRows = statement.executeUpdate();
+
+      if (updatedRows != 0) {
+        return readAccountsIfExists("id", id).get(0);
+      } else {
+        throw new EntityNotFoundException(String.format("Счет с id %s не найден", id));
+      }
+    } catch (SQLException e) {
+      throw new DBException("Не удалось обновить счет в базе", e);
+    }
+  }
+
+  private List<Account> readAccountsIfExists(String argumentName, Object argumentValue) {
+    try (Connection connection = dataSource.getConnection();
+        PreparedStatement statement =
+            connection.prepareStatement(
+                "SELECT id, created_at, updated_at, title, bank_id, sum, user_id "
+                    + "FROM application.accounts "
+                    + "WHERE "
+                    + argumentName
+                    + "= ?")) {
 
       statement.setObject(1, argumentValue);
 
       ResultSet resultSet = statement.executeQuery();
       List<Account> accounts = new ArrayList<>();
-      if (!resultSet.wasNull() && resultSet.next()) {
+      while (resultSet.next()) {
         accounts.add(accountRowMapper.mapRow(resultSet));
       }
       return accounts;
     } catch (SQLException e) {
-      throw new DBException(String.format("Не удалось считать счет с %s %s из БД",
-          argumentName, argumentValue), e);
+      throw new DBException(
+          String.format("Не удалось считать счет с %s %s из БД", argumentName, argumentValue), e);
     }
   }
 

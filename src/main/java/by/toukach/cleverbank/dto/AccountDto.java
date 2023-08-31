@@ -12,5 +12,6 @@ public class AccountDto {
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
   private String title;
+  private Long bankId;
   private Long sum;
 }

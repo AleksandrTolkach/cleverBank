@@ -10,4 +10,6 @@ public interface AccountService {
   AccountDto read(Long id);
 
   List<AccountDto> readByUserId(Long userId);
+
+  AccountDto update(AccountDto accountDto);
 }

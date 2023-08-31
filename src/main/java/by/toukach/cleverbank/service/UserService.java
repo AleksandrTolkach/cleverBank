@@ -10,4 +10,5 @@ public interface UserService {
 
   UserDto readByLogin(String login);
 
+  boolean isExists(String login);
 }
