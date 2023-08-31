@@ -4,6 +4,10 @@ import by.toukach.cleverbank.dto.AccountDto;
 import by.toukach.cleverbank.dto.TransactionDto;
 import by.toukach.cleverbank.dto.UserDto;
 import by.toukach.cleverbank.enumiration.TransactionType;
+import by.toukach.cleverbank.exception.DBException;
+import by.toukach.cleverbank.repository.impl.DBInitializerImpl;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 
@@ -34,7 +38,6 @@ public class ReceiveAccountViewChain extends TransactionViewChain {
         .build();
 
     getTransactionHandlerFactory().getHandler(TransactionType.RECEIVE).handle(transactionDto);
-    getTransactionService().create(transactionDto);
 
     setNextView(new SpecificAccountViewChain(getAccountService().read(accountId), getUserDto()));
   }

@@ -1,6 +1,7 @@
 package by.toukach.cleverbank.service;
 
 import by.toukach.cleverbank.dto.AccountDto;
+import java.sql.Connection;
 import java.util.List;
 
 public interface AccountService {
@@ -11,5 +12,5 @@ public interface AccountService {
 
   List<AccountDto> readByUserId(Long userId);
 
-  AccountDto update(AccountDto accountDto);
+  AccountDto update(AccountDto accountDto, Connection connection);
 }

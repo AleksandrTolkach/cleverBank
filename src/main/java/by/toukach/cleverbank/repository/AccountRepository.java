@@ -1,6 +1,7 @@
 package by.toukach.cleverbank.repository;
 
 import by.toukach.cleverbank.dao.Account;
+import java.sql.Connection;
 import java.util.List;
 
 public interface AccountRepository {
@@ -11,5 +12,5 @@ public interface AccountRepository {
 
   List<Account> readByUserId(Long userId);
 
-  Account update(Account account);
+  Account update(Account account, Connection connection);
 }

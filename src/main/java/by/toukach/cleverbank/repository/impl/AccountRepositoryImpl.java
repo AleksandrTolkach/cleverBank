@@ -66,11 +66,10 @@ public class AccountRepositoryImpl implements AccountRepository {
   }
 
   @Override
-  public Account update(Account account) {
+  public Account update(Account account, Connection connection) {
     Long id = account.getId();
 
-    try (Connection connection = dataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement(
+    try (PreparedStatement statement = connection.prepareStatement(
             "UPDATE application.accounts SET updated_at = ?, title = ?, sum = ? "
                 + "WHERE id = ?")) {
       statement.setObject(1, account.getUpdatedAt());
@@ -81,7 +80,8 @@ public class AccountRepositoryImpl implements AccountRepository {
       int updatedRows = statement.executeUpdate();
 
       if (updatedRows != 0) {
-        return readAccountsIfExists("id", id).get(0);
+        Connection[] connections = new Connection[] {connection};
+        return readAccountsIfExists("id", id, connections).get(0);
       } else {
         throw new EntityNotFoundException(String.format("Счет с id %s не найден", id));
       }
@@ -90,15 +90,21 @@ public class AccountRepositoryImpl implements AccountRepository {
     }
   }
 
-  private List<Account> readAccountsIfExists(String argumentName, Object argumentValue) {
-    try (Connection connection = dataSource.getConnection();
-        PreparedStatement statement =
-            connection.prepareStatement(
-                "SELECT id, created_at, updated_at, title, bank_id, sum, user_id "
-                    + "FROM application.accounts "
-                    + "WHERE "
-                    + argumentName
-                    + "= ?")) {
+  private List<Account> readAccountsIfExists(String argumentName, Object argumentValue,
+      Connection... existingConnection) {
+    boolean isExistingConnectionNotExists =
+        existingConnection == null || existingConnection.length == 0;
+
+    try {
+      Connection connection = isExistingConnectionNotExists ? dataSource.getConnection() :
+          existingConnection[0];
+      PreparedStatement statement =
+          connection.prepareStatement(
+              "SELECT id, created_at, updated_at, title, bank_id, sum, user_id "
+                  + "FROM application.accounts "
+                  + "WHERE "
+                  + argumentName
+                  + "= ?");
 
       statement.setObject(1, argumentValue);
 
@@ -106,6 +112,10 @@ public class AccountRepositoryImpl implements AccountRepository {
       List<Account> accounts = new ArrayList<>();
       while (resultSet.next()) {
         accounts.add(accountRowMapper.mapRow(resultSet));
+      }
+
+      if (isExistingConnectionNotExists) {
+        connection.close();
       }
       return accounts;
     } catch (SQLException e) {
