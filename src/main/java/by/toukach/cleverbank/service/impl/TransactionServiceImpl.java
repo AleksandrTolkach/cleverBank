@@ -7,6 +7,7 @@ import by.toukach.cleverbank.dto.TransactionDto;
 import by.toukach.cleverbank.repository.TransactionRepository;
 import by.toukach.cleverbank.repository.impl.TransactionRepositoryImpl;
 import by.toukach.cleverbank.service.TransactionService;
+import java.sql.Connection;
 import java.time.LocalDateTime;
 
 public class TransactionServiceImpl implements TransactionService {
@@ -22,10 +23,10 @@ public class TransactionServiceImpl implements TransactionService {
   }
 
   @Override
-  public TransactionDto create(TransactionDto transactionDto) {
+  public TransactionDto create(TransactionDto transactionDto, Connection connection) {
     transactionDto.setDate(LocalDateTime.now());
     Transaction transaction = transactionConverter.toEntity(transactionDto);
-    transaction = transactionRepository.create(transaction);
+    transaction = transactionRepository.create(transaction, connection);
     return transactionConverter.toDto(transaction);
   }
 

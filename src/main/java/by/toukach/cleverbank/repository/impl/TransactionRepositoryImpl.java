@@ -26,9 +26,8 @@ public class TransactionRepositoryImpl implements TransactionRepository {
   }
 
   @Override
-  public Transaction create(Transaction transaction) {
-    try (Connection connection = dataSource.getConnection();
-        PreparedStatement statement =
+  public Transaction create(Transaction transaction, Connection connection) {
+    try (PreparedStatement statement =
             connection.prepareStatement(
                 "INSERT INTO application.transactions (date, type, sender_bank_id, "
                     + "receiver_bank_id, sender_account_id, receiver_account_id, value) "

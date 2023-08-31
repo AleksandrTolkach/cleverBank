@@ -7,6 +7,7 @@ import by.toukach.cleverbank.dto.AccountDto;
 import by.toukach.cleverbank.repository.AccountRepository;
 import by.toukach.cleverbank.repository.impl.AccountRepositoryImpl;
 import by.toukach.cleverbank.service.AccountService;
+import java.sql.Connection;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -45,10 +46,10 @@ public class AccountServiceImpl implements AccountService {
   }
 
   @Override
-  public AccountDto update(AccountDto accountDto) {
+  public AccountDto update(AccountDto accountDto, Connection connection) {
     accountDto.setUpdatedAt(LocalDateTime.now());
     Account account = accountConverter.toEntity(accountDto);
-    account = accountRepository.update(account);
+    account = accountRepository.update(account, connection);
     return accountConverter.toDto(account);
   }
 
