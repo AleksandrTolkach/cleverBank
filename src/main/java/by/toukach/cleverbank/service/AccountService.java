@@ -12,5 +12,7 @@ public interface AccountService {
 
   List<AccountDto> readByUserId(Long userId);
 
+  List<AccountDto> readAll();
+
   AccountDto update(AccountDto accountDto, Connection connection);
 }

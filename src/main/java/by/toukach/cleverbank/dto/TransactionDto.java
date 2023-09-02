@@ -16,5 +16,5 @@ public class TransactionDto {
   private Long receiverBankId;
   private Long senderAccountId;
   private Long receiverAccountId;
-  private Long value;
+  private Double value;
 }

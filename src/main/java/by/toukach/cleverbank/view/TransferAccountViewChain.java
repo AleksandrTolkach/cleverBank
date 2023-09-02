@@ -5,7 +5,6 @@ import by.toukach.cleverbank.dto.TransactionDto;
 import by.toukach.cleverbank.dto.UserDto;
 import by.toukach.cleverbank.enumiration.TransactionType;
 import by.toukach.cleverbank.exception.InsufficientFundsException;
-import by.toukach.cleverbank.service.TransactionHandler;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 
@@ -23,7 +22,7 @@ public class TransferAccountViewChain extends TransactionViewChain {
     long receiverAccountId = scanner.nextLong();
     scanner.nextLine();
     System.out.println("Введите сумму перевода");
-    long value = scanner.nextLong();
+    double value = scanner.nextDouble();
 
     AccountDto receiverAccountDto = getAccountService().read(receiverAccountId);
 

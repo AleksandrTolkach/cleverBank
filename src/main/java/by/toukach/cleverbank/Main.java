@@ -1,27 +1,27 @@
 package by.toukach.cleverbank;
 
-import by.toukach.cleverbank.service.AccountService;
-import by.toukach.cleverbank.service.AuthService;
-import by.toukach.cleverbank.service.UserService;
-import by.toukach.cleverbank.service.impl.AccountServiceImpl;
-import by.toukach.cleverbank.service.impl.AuthServiceImpl;
-import by.toukach.cleverbank.service.impl.UserServiceImpl;
+import by.toukach.cleverbank.service.PercentageService;
+import by.toukach.cleverbank.service.impl.PercentageServiceImpl;
 import by.toukach.cleverbank.view.EntryViewChain;
 import by.toukach.cleverbank.view.ViewChain;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Main {
 
-  private static final UserService userService = UserServiceImpl.getInstance();
-  private static final AuthService authService = AuthServiceImpl.getInstance();
-  private static final AccountService accountService = AccountServiceImpl.getInstance();
-
   public static void main(String[] args) {
-    ViewChain viewChain = new EntryViewChain();
+    ExecutorService executorService = Executors.newFixedThreadPool(2);
+    PercentageService percentageService = PercentageServiceImpl.getInstance();
 
-    while (true) {
-      viewChain.handle();
-      viewChain = viewChain.getNextView();
-      System.out.println();
-    }
+    executorService.submit(
+        () -> {
+          ViewChain viewChain = new EntryViewChain();
+          while (true) {
+            viewChain.handle();
+            viewChain = viewChain.getNextView();
+          }
+        });
+
+    executorService.submit(percentageService::run);
   }
 }

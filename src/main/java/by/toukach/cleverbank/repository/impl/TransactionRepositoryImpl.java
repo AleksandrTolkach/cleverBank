@@ -40,7 +40,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
       statement.setLong(4, transaction.getReceiverBankId());
       statement.setLong(5, transaction.getSenderAccountId());
       statement.setLong(6, transaction.getReceiverAccountId());
-      statement.setLong(7, transaction.getValue());
+      statement.setDouble(7, transaction.getValue());
 
       statement.execute();
 

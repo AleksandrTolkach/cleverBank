@@ -23,7 +23,7 @@ public class CreateAccountViewChain extends AccountViewChain {
 
     AccountDto accountDto = AccountDto.builder()
         .title(title)
-        .sum(0L)
+        .sum(0.0)
         .build();
 
     accountDto = getAccountService().create(accountDto, getUserDto().getId());

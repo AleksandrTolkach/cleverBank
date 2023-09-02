@@ -13,5 +13,5 @@ public class Account {
   private LocalDateTime updatedAt;
   private String title;
   private Long bankId;
-  private Long sum;
+  private Double sum;
 }

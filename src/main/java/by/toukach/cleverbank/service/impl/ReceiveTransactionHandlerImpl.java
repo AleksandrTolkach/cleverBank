@@ -19,30 +19,32 @@ public class ReceiveTransactionHandlerImpl implements TransactionHandler {
   @Override
   public TransactionDto handle(TransactionDto transactionDto) {
     Long accountId = transactionDto.getReceiverAccountId();
-    AccountDto accountDto = accountService.read(accountId);
-    Long sum = accountDto.getSum();
-    sum += transactionDto.getValue();
-    accountDto.setSum(sum);
+    synchronized (accountService) {
+      AccountDto accountDto = accountService.read(accountId);
+      Double sum = accountDto.getSum();
+      sum += transactionDto.getValue();
+      accountDto.setSum(sum);
 
-    Connection connection = null;
-    try {
-      connection = DBInitializerImpl.getInstance().getDataSource().getConnection();
-      connection.setAutoCommit(false);
+      Connection connection = null;
+      try {
+        connection = DBInitializerImpl.getInstance().getDataSource().getConnection();
+        connection.setAutoCommit(false);
 
-      accountService.update(accountDto, connection);
-      transactionDto = transactionService.create(transactionDto, connection);
+        accountService.update(accountDto, connection);
+        transactionDto = transactionService.create(transactionDto, connection);
 
-      connection.commit();
-      return transactionDto;
-    } catch (SQLException e) {
-      if (connection != null) {
-        try {
-          connection.rollback();
-        } catch (SQLException ex) {
-          throw new DBException("Не удалось отменить транзакцию");
+        connection.commit();
+        return transactionDto;
+      } catch (SQLException e) {
+        if (connection != null) {
+          try {
+            connection.rollback();
+          } catch (SQLException ex) {
+            throw new DBException("Не удалось отменить транзакцию");
+          }
         }
+        throw new DBException("Не удалось выполнить подключение к базе");
       }
-      throw new DBException("Не удалось выполнить подключение к базе");
     }
   }
 

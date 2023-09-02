@@ -34,12 +34,13 @@ public class AccountRepositoryImpl implements AccountRepository {
             connection.prepareStatement(
                 "INSERT INTO application.accounts (created_at, updated_at, title, bank_id, "
                     + "sum, user_id) "
-                    + "VALUES (?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+                    + "VALUES (?, ?, ?, ?, ?, ?)",
+                Statement.RETURN_GENERATED_KEYS)) {
       statement.setObject(1, account.getCreatedAt());
       statement.setObject(2, account.getUpdatedAt());
       statement.setString(3, account.getTitle());
       statement.setLong(4, account.getBankId());
-      statement.setLong(5, account.getSum());
+      statement.setDouble(5, account.getSum());
       statement.setLong(6, userId);
 
       statement.execute();
@@ -66,15 +67,37 @@ public class AccountRepositoryImpl implements AccountRepository {
   }
 
   @Override
+  public List<Account> readAll() {
+    try (Connection connection = DBInitializerImpl.getInstance().getDataSource().getConnection();
+        PreparedStatement statement = connection.prepareStatement(
+            "SELECT id, created_at, updated_at, title, bank_id, sum, user_id "
+                + "FROM application.accounts "
+        )) {
+
+      ResultSet resultSet = statement.executeQuery();
+
+      List<Account> accounts = new ArrayList<>();
+      while (resultSet.next()) {
+        accounts.add(accountRowMapper.mapRow(resultSet));
+      }
+
+      return accounts;
+    } catch (SQLException e) {
+      throw new DBException("Не удалось выполнить запрос в базу");
+    }
+  }
+
+  @Override
   public Account update(Account account, Connection connection) {
     Long id = account.getId();
 
-    try (PreparedStatement statement = connection.prepareStatement(
+    try (PreparedStatement statement =
+        connection.prepareStatement(
             "UPDATE application.accounts SET updated_at = ?, title = ?, sum = ? "
                 + "WHERE id = ?")) {
       statement.setObject(1, account.getUpdatedAt());
       statement.setString(2, account.getTitle());
-      statement.setLong(3, account.getSum());
+      statement.setDouble(3, account.getSum());
       statement.setLong(4, id);
 
       int updatedRows = statement.executeUpdate();
@@ -90,14 +113,14 @@ public class AccountRepositoryImpl implements AccountRepository {
     }
   }
 
-  private List<Account> readAccountsIfExists(String argumentName, Object argumentValue,
-      Connection... existingConnection) {
+  private List<Account> readAccountsIfExists(
+      String argumentName, Object argumentValue, Connection... existingConnection) {
     boolean isExistingConnectionNotExists =
         existingConnection == null || existingConnection.length == 0;
 
     try {
-      Connection connection = isExistingConnectionNotExists ? dataSource.getConnection() :
-          existingConnection[0];
+      Connection connection =
+          isExistingConnectionNotExists ? dataSource.getConnection() : existingConnection[0];
       PreparedStatement statement =
           connection.prepareStatement(
               "SELECT id, created_at, updated_at, title, bank_id, sum, user_id "
