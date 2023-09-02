@@ -24,7 +24,7 @@ public class TransactionMapper implements RowMapper<Transaction> {
         .receiverBankId(resultSet.getLong("receiver_bank_id"))
         .senderAccountId(resultSet.getLong("sender_account_id"))
         .receiverAccountId(resultSet.getLong("receiver_account_id"))
-        .value(resultSet.getLong("value"))
+        .value(resultSet.getDouble("value"))
         .build();
   }
 

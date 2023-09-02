@@ -19,43 +19,45 @@ public class TransferTransactionHandlerImpl implements TransactionHandler {
 
   @Override
   public TransactionDto handle(TransactionDto transactionDto) {
-    AccountDto senderAccount = accountService.read(transactionDto.getSenderAccountId());
-    AccountDto receiverAccount = accountService.read(transactionDto.getReceiverAccountId());
+    synchronized (accountService) {
+      AccountDto senderAccount = accountService.read(transactionDto.getSenderAccountId());
+      AccountDto receiverAccount = accountService.read(transactionDto.getReceiverAccountId());
 
-    Long value = transactionDto.getValue();
+      Double value = transactionDto.getValue();
 
-    Long senderAccountSum = senderAccount.getSum();
+      Double senderAccountSum = senderAccount.getSum();
 
-    if (senderAccountSum < value) {
-      throw new InsufficientFundsException("На счете недостаточно средств");
-    }
-
-    senderAccountSum = senderAccountSum - value;
-    Long receiverAccountSum = receiverAccount.getSum() + value;
-
-    senderAccount.setSum(senderAccountSum);
-    receiverAccount.setSum(receiverAccountSum);
-
-    Connection connection = null;
-    try {
-      connection = DBInitializerImpl.getInstance().getDataSource().getConnection();
-      connection.setAutoCommit(false);
-
-      accountService.update(senderAccount, connection);
-      accountService.update(receiverAccount, connection);
-      transactionDto = transactionService.create(transactionDto, connection);
-
-      connection.commit();
-      return transactionDto;
-    } catch (SQLException e) {
-      if (connection != null) {
-        try {
-          connection.rollback();
-        } catch (SQLException ex) {
-          throw new DBException("Не удалось отменить транзакцию");
-        }
+      if (senderAccountSum < value) {
+        throw new InsufficientFundsException("На счете недостаточно средств");
       }
-      throw new DBException("Не удалось выполнить транзакцию", e);
+
+      senderAccountSum = senderAccountSum - value;
+      Double receiverAccountSum = receiverAccount.getSum() + value;
+
+      senderAccount.setSum(senderAccountSum);
+      receiverAccount.setSum(receiverAccountSum);
+
+      Connection connection = null;
+      try {
+        connection = DBInitializerImpl.getInstance().getDataSource().getConnection();
+        connection.setAutoCommit(false);
+
+        accountService.update(senderAccount, connection);
+        accountService.update(receiverAccount, connection);
+        transactionDto = transactionService.create(transactionDto, connection);
+
+        connection.commit();
+        return transactionDto;
+      } catch (SQLException e) {
+        if (connection != null) {
+          try {
+            connection.rollback();
+          } catch (SQLException ex) {
+            throw new DBException("Не удалось отменить транзакцию");
+          }
+        }
+        throw new DBException("Не удалось выполнить транзакцию", e);
+      }
     }
   }
 

@@ -23,7 +23,7 @@ public class ReceiveAccountViewChain extends TransactionViewChain {
     System.out.println("Введите сумму");
     Long accountId = getAccountDto().getId();
     Scanner scanner = getScanner();
-    long answer = scanner.nextLong();
+    double answer = scanner.nextDouble();
     scanner.nextLine();
 
     TransactionDto transactionDto = TransactionDto.builder()

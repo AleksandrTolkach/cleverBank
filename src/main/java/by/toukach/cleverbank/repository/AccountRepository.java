@@ -12,5 +12,7 @@ public interface AccountRepository {
 
   List<Account> readByUserId(Long userId);
 
+  List<Account> readAll();
+
   Account update(Account account, Connection connection);
 }
