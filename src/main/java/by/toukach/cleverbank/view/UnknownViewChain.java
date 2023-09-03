@@ -8,6 +8,6 @@ public class UnknownViewChain extends ViewChain {
 
   @Override
   public void handle() {
-    System.out.println("Нет такого варианта");
+    System.out.println(ViewMessage.WRONG_OPTION_MESSAGE);
   }
 }

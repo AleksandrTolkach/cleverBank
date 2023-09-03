@@ -7,20 +7,19 @@ import java.util.Scanner;
 
 public class AccountActionViewChain extends ViewChain {
 
-  private Map<Integer, ViewChain> viewChainMap = new HashMap<>();
+  private final Map<Integer, ViewChain> viewChainMap = new HashMap<>();
 
   public AccountActionViewChain(UserDto userDto) {
     setUserDto(userDto);
     viewChainMap.put(1, new CreateAccountViewChain(getUserDto()));
     viewChainMap.put(2, new ListAccountViewChain(getUserDto()));
     viewChainMap.put(3, this);
-    viewChainMap.put(4, new FinishViewChain());
+    viewChainMap.put(4, new WaitViewChain());
   }
 
   @Override
   public void handle() {
-    System.out.println("Выберите действие:\n1.Создать счет\n2.Действие над существующим счетом\n"
-            + "3.На главную\n4.Выйти");
+    System.out.println(ViewMessage.ACTION_LIST_MESSAGE);
     Scanner scanner = getScanner();
     int answer = scanner.nextInt();
     scanner.nextLine();

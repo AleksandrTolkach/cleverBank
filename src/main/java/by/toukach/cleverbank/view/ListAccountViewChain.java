@@ -18,12 +18,12 @@ public class ListAccountViewChain extends AccountViewChain {
   public void handle() {
     List<AccountDto> accountDtos = getAccountService().readByUserId(getUserDto().getId());
     if (accountDtos.isEmpty()) {
-      System.out.println("У вас нет счетов");
+      System.out.println(ViewMessage.ACCOUNTS_NOT_EXIST_MESSAGE);
       setNextView(new AccountActionViewChain(getUserDto()));
       return;
     }
 
-    System.out.println("Выберите счет:");
+    System.out.println(ViewMessage.ACCOUNT_CHOOSE_MESSAGE);
 
     accountDtos.forEach(a -> System.out.println(String.format("%s. %s", a.getId(), a.getTitle())));
 
@@ -37,8 +37,7 @@ public class ListAccountViewChain extends AccountViewChain {
         .orElse(null);
 
     if (accountDto == null) {
-      System.out.println("Выбран неверный вариант");
-      setNextView(this);
+      setNextView(new UnknownViewChain(this));
     } else {
       setNextView(new SpecificAccountViewChain(accountDto, getUserDto()));
     }

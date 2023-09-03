@@ -4,6 +4,7 @@ import by.toukach.cleverbank.dao.Account;
 import by.toukach.cleverbank.dao.converter.Converter;
 import by.toukach.cleverbank.dao.converter.impl.AccountConverter;
 import by.toukach.cleverbank.dto.AccountDto;
+import by.toukach.cleverbank.exception.ExceptionMessage;
 import by.toukach.cleverbank.exception.UpdateObjectException;
 import by.toukach.cleverbank.repository.AccountRepository;
 import by.toukach.cleverbank.repository.impl.AccountRepositoryImpl;
@@ -57,7 +58,7 @@ public class AccountServiceImpl implements AccountService {
   public AccountDto update(AccountDto accountDto, Connection connection) {
     Account account = accountConverter.toEntity(accountDto);
     if (!accountDto.getUpdatedAt().equals(account.getUpdatedAt())) {
-      throw new UpdateObjectException("Запись устарела, повторите попытку позже");
+      throw new UpdateObjectException(ExceptionMessage.ENTITY_UPDATE_MESSAGE);
     }
     account = accountRepository.update(account, connection);
     return accountConverter.toDto(account);

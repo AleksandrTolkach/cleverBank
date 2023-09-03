@@ -1,4 +1,4 @@
-package by.toukach.cleverbank.service;
+package by.toukach.cleverbank.service.handler;
 
 import by.toukach.cleverbank.enumiration.TransactionType;
 import by.toukach.cleverbank.dto.TransactionDto;

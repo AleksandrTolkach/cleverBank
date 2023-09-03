@@ -2,7 +2,17 @@ package by.toukach.cleverbank.enumiration;
 
 public enum TransactionType {
 
-  SPEND,
-  RECEIVE,
-  TRANSFER
+  SPEND("Списание"),
+  RECEIVE("Получение"),
+  TRANSFER("Перевод");
+
+  private final String value;
+
+  TransactionType(String value) {
+    this.value = value;
+  }
+
+  public String getValue() {
+    return value;
+  }
 }

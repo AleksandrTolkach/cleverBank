@@ -2,11 +2,11 @@ package by.toukach.cleverbank.view;
 
 import java.util.Scanner;
 
-public class FinishViewChain extends ViewChain {
+public class WaitViewChain extends ViewChain {
 
   @Override
   public void handle() {
-    System.out.println("Чтобы войти введите любой символ");
+    System.out.println(ViewMessage.WAITER_MESSAGE);
     Scanner scanner = getScanner();
     scanner.nextLine();
     setNextView(new EntryViewChain());

@@ -1,8 +1,8 @@
-package by.toukach.cleverbank.service.impl;
+package by.toukach.cleverbank.service.handler.impl;
 
 import by.toukach.cleverbank.enumiration.TransactionType;
-import by.toukach.cleverbank.service.TransactionHandler;
-import by.toukach.cleverbank.service.TransactionHandlerFactory;
+import by.toukach.cleverbank.service.handler.TransactionHandler;
+import by.toukach.cleverbank.service.handler.TransactionHandlerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
