@@ -4,10 +4,8 @@ import by.toukach.cleverbank.dto.AccountDto;
 import by.toukach.cleverbank.dto.TransactionDto;
 import by.toukach.cleverbank.dto.UserDto;
 import by.toukach.cleverbank.enumiration.TransactionType;
-import by.toukach.cleverbank.exception.DBException;
-import by.toukach.cleverbank.repository.impl.DBInitializerImpl;
-import java.sql.Connection;
-import java.sql.SQLException;
+import by.toukach.cleverbank.exception.ArgumentValueException;
+import by.toukach.cleverbank.exception.ExceptionMessage;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 
@@ -20,7 +18,7 @@ public class ReceiveAccountViewChain extends TransactionViewChain {
 
   @Override
   public void handle() {
-    System.out.println("Введите сумму");
+    System.out.println(ViewMessage.SUM_MESSAGE);
     Long accountId = getAccountDto().getId();
     Scanner scanner = getScanner();
     double answer = scanner.nextDouble();
@@ -37,7 +35,12 @@ public class ReceiveAccountViewChain extends TransactionViewChain {
         .value(answer)
         .build();
 
-    getTransactionHandlerFactory().getHandler(TransactionType.RECEIVE).handle(transactionDto);
+    try {
+      getTransactionHandlerFactory().getHandler(TransactionType.RECEIVE).handle(transactionDto);
+    } catch (ArgumentValueException e) {
+      System.out.println(e.getMessage());
+      setNextView(this);
+    }
 
     setNextView(new SpecificAccountViewChain(getAccountService().read(accountId), getUserDto()));
   }

@@ -29,5 +29,9 @@ public abstract class ViewChain {
     return scanner;
   }
 
+  public void setScanner(Scanner scanner) {
+    this.scanner = scanner;
+  }
+
   public abstract void handle();
 }

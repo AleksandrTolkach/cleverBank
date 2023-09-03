@@ -4,6 +4,7 @@ import by.toukach.cleverbank.dto.AccountDto;
 import by.toukach.cleverbank.dto.TransactionDto;
 import by.toukach.cleverbank.dto.UserDto;
 import by.toukach.cleverbank.enumiration.TransactionType;
+import by.toukach.cleverbank.exception.ArgumentValueException;
 import by.toukach.cleverbank.exception.InsufficientFundsException;
 import java.time.LocalDateTime;
 import java.util.Scanner;
@@ -17,11 +18,13 @@ public class SpendAccountViewChain extends TransactionViewChain {
 
   @Override
   public void handle() {
-    System.out.println("Введите сумму");
+    System.out.println(ViewMessage.SUM_MESSAGE);
     Long accountId = getAccountDto().getId();
     Scanner scanner = getScanner();
+
     double answer = scanner.nextDouble();
     scanner.nextLine();
+
 
     TransactionDto transactionDto = TransactionDto.builder()
         .receiverAccountId(accountId)
@@ -36,7 +39,7 @@ public class SpendAccountViewChain extends TransactionViewChain {
 
     try {
       getTransactionHandlerFactory().getHandler(TransactionType.SPEND).handle(transactionDto);
-    } catch (InsufficientFundsException e) {
+    } catch (InsufficientFundsException | ArgumentValueException e) {
       System.out.println(e.getMessage());
       setNextView(this);
     }

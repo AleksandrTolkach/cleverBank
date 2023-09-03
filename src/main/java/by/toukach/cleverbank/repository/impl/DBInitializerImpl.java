@@ -1,6 +1,7 @@
 package by.toukach.cleverbank.repository.impl;
 
 import by.toukach.cleverbank.exception.DBException;
+import by.toukach.cleverbank.exception.ExceptionMessage;
 import by.toukach.cleverbank.repository.DBInitializer;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import java.beans.PropertyVetoException;
@@ -36,7 +37,7 @@ public class DBInitializerImpl implements DBInitializer {
           try {
             instance = new DBInitializerImpl();
           } catch (PropertyVetoException e) {
-            throw new DBException("Ошибка подключения к базе", e);
+            throw new DBException(ExceptionMessage.DB_CONNECT_MESSAGE, e);
           }
         }
       }

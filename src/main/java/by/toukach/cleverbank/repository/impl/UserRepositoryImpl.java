@@ -5,6 +5,7 @@ import by.toukach.cleverbank.dao.mapper.RowMapper;
 import by.toukach.cleverbank.dao.mapper.impl.UserMapper;
 import by.toukach.cleverbank.exception.DBException;
 import by.toukach.cleverbank.exception.EntityNotFoundException;
+import by.toukach.cleverbank.exception.ExceptionMessage;
 import by.toukach.cleverbank.repository.UserRepository;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -48,7 +49,7 @@ public class UserRepositoryImpl implements UserRepository {
         user.setId(generatedKeys.getLong("id"));
       }
     } catch (SQLException e) {
-      throw new DBException("Не удалось записать пользователя в базу", e);
+      throw new DBException(ExceptionMessage.USER_SAVE_MESSAGE, e);
     }
     return user;
   }
@@ -77,10 +78,10 @@ public class UserRepositoryImpl implements UserRepository {
       if (!resultSet.wasNull() && resultSet.next()) {
         return resultSet.getBoolean(1);
       } else {
-        throw new DBException("Не удалось выполнить запрос в базу");
+        throw new DBException(ExceptionMessage.DB_REQUEST_MESSAGE);
       }
     } catch (SQLException e) {
-      throw new DBException("Не удалось выполнить запрос в базу", e);
+      throw new DBException(ExceptionMessage.DB_REQUEST_MESSAGE, e);
     }
   }
 
@@ -97,11 +98,11 @@ public class UserRepositoryImpl implements UserRepository {
       if (!resultSet.wasNull() && resultSet.next()) {
         return userRowMapper.mapRow(resultSet);
       } else {
-        throw new EntityNotFoundException(String.format("Пользователь с %s %s не найден",
+        throw new EntityNotFoundException(String.format(ExceptionMessage.USER_NOT_FOUND_MESSAGE,
             argumentName, argumentValue));
       }
     } catch (SQLException e) {
-      throw new DBException(String.format("Не удалось считать пользователя c %s %s из БД",
+      throw new DBException(String.format(ExceptionMessage.USER_READ_MESSAGE,
           argumentName, argumentValue), e);
     }
   }

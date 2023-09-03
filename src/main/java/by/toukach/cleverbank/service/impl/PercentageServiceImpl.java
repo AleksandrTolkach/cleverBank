@@ -2,6 +2,7 @@ package by.toukach.cleverbank.service.impl;
 
 import by.toukach.cleverbank.dto.AccountDto;
 import by.toukach.cleverbank.exception.DBException;
+import by.toukach.cleverbank.exception.ExceptionMessage;
 import by.toukach.cleverbank.exception.InsufficientFundsException;
 import by.toukach.cleverbank.exception.SleepException;
 import by.toukach.cleverbank.repository.impl.DBInitializerImpl;
@@ -22,7 +23,7 @@ import org.yaml.snakeyaml.Yaml;
 public class PercentageServiceImpl implements PercentageService {
 
   private static final PercentageService instance = new PercentageServiceImpl();
-  private static final String PERCENTAGE_FILE_PATH = "percentage.yml";
+  private static final String PERCENTAGE_FILE_PATH = "application.yml";
 
   private final AccountService accountService;
 
@@ -36,7 +37,7 @@ public class PercentageServiceImpl implements PercentageService {
       try {
         TimeUnit.SECONDS.sleep(30);
       } catch (InterruptedException e) {
-        throw new SleepException("Не удалось остановить поток", e);
+        throw new SleepException(ExceptionMessage.THREAD_SLEEP_MESSAGE, e);
       }
 
       LocalDateTime now = LocalDateTime.now();
@@ -56,7 +57,7 @@ public class PercentageServiceImpl implements PercentageService {
           Map<String, Double> data = yaml.load(inputStream);
           percentage = data.getOrDefault("percentage", 0.001);
         } catch (IOException e) {
-          throw new InsufficientFundsException("Не удалось считать данные с файла с процентами");
+          throw new InsufficientFundsException(ExceptionMessage.PERCENTAGE_FILE_MESSAGE);
         }
 
         List<AccountDto> accountDtos = accountService.readAll();
@@ -71,7 +72,7 @@ public class PercentageServiceImpl implements PercentageService {
                 DBInitializerImpl.getInstance().getDataSource().getConnection()) {
               accountService.update(accountDto, connection);
             } catch (SQLException e) {
-              throw new DBException("Не удалось выполнить подключение к базе");
+              throw new DBException(ExceptionMessage.DB_CONNECT_MESSAGE, e);
             }
           }
         }

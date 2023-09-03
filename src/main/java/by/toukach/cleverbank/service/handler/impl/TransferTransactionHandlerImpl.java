@@ -1,14 +1,19 @@
-package by.toukach.cleverbank.service.impl;
+package by.toukach.cleverbank.service.handler.impl;
 
 import by.toukach.cleverbank.dto.AccountDto;
 import by.toukach.cleverbank.dto.TransactionDto;
 import by.toukach.cleverbank.enumiration.TransactionType;
+import by.toukach.cleverbank.exception.ArgumentValueException;
 import by.toukach.cleverbank.exception.DBException;
+import by.toukach.cleverbank.exception.ExceptionMessage;
 import by.toukach.cleverbank.exception.InsufficientFundsException;
+import by.toukach.cleverbank.exception.TransferException;
 import by.toukach.cleverbank.repository.impl.DBInitializerImpl;
 import by.toukach.cleverbank.service.AccountService;
-import by.toukach.cleverbank.service.TransactionHandler;
+import by.toukach.cleverbank.service.handler.TransactionHandler;
 import by.toukach.cleverbank.service.TransactionService;
+import by.toukach.cleverbank.service.impl.AccountServiceImpl;
+import by.toukach.cleverbank.service.impl.TransactionServiceImpl;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -19,16 +24,23 @@ public class TransferTransactionHandlerImpl implements TransactionHandler {
 
   @Override
   public TransactionDto handle(TransactionDto transactionDto) {
+    Double value = transactionDto.getValue();
+    if (value <= 0) {
+      throw new ArgumentValueException(ExceptionMessage.POSITIVE_ARGUMENT_VALUE_MESSAGE);
+    }
+
     synchronized (accountService) {
       AccountDto senderAccount = accountService.read(transactionDto.getSenderAccountId());
       AccountDto receiverAccount = accountService.read(transactionDto.getReceiverAccountId());
 
-      Double value = transactionDto.getValue();
+      if (senderAccount.getId().equals(receiverAccount.getId())) {
+        throw new TransferException(ExceptionMessage.TRANSFER_LOOP_MESSAGE);
+      }
 
       Double senderAccountSum = senderAccount.getSum();
 
       if (senderAccountSum < value) {
-        throw new InsufficientFundsException("На счете недостаточно средств");
+        throw new InsufficientFundsException(ExceptionMessage.INSUFFICIENT_FUNDS_MESSAGE);
       }
 
       senderAccountSum = senderAccountSum - value;
@@ -53,10 +65,10 @@ public class TransferTransactionHandlerImpl implements TransactionHandler {
           try {
             connection.rollback();
           } catch (SQLException ex) {
-            throw new DBException("Не удалось отменить транзакцию");
+            throw new DBException(ExceptionMessage.TRANSACTION_ROLLBACK_MESSAGE, ex);
           }
         }
-        throw new DBException("Не удалось выполнить транзакцию", e);
+        throw new DBException(ExceptionMessage.TRANSACTION_SAVE_MESSAGE, e);
       }
     }
   }

@@ -5,6 +5,7 @@ import by.toukach.cleverbank.dao.mapper.RowMapper;
 import by.toukach.cleverbank.dao.mapper.impl.TransactionMapper;
 import by.toukach.cleverbank.exception.DBException;
 import by.toukach.cleverbank.exception.EntityNotFoundException;
+import by.toukach.cleverbank.exception.ExceptionMessage;
 import by.toukach.cleverbank.repository.TransactionRepository;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -50,7 +51,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         transaction.setId(generatedKeys.getLong("id"));
       }
     } catch (SQLException e) {
-      throw new DBException("Не удалось записать транзакцию в базу", e);
+      throw new DBException(ExceptionMessage.TRANSACTION_SAVE_MESSAGE, e);
     }
     return transaction;
   }
@@ -72,10 +73,11 @@ public class TransactionRepositoryImpl implements TransactionRepository {
       if (!resultSet.wasNull() && resultSet.next()) {
         return transactionRowMapper.mapRow(resultSet);
       } else {
-        throw new EntityNotFoundException(String.format("Транзакции с id %s не найден", id));
+        throw new EntityNotFoundException(
+            String.format(ExceptionMessage.TRANSACTION_NOT_FOUND_MESSAGE, id));
       }
     } catch (SQLException e) {
-      throw new DBException("Не считать транзакцию из базы", e);
+      throw new DBException(ExceptionMessage.TRANSACTION_READ_MESSAGE, e);
     }
   }
 

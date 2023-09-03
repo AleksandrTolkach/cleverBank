@@ -9,14 +9,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
 public class CreateAccountViewChain extends AccountViewChain {
 
-
   public CreateAccountViewChain(UserDto userDto) {
     setUserDto(userDto);
   }
 
   @Override
   public void handle() {
-    System.out.println("Введите название счета");
+    System.out.println(ViewMessage.ACCOUNT_NUMBER_MESSAGE);
 
     Scanner scanner = getScanner();
     String title = scanner.nextLine();
