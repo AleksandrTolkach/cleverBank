@@ -1,0 +1,28 @@
+version: '3.5'
+services:
+  db:
+    build: postgresql
+    image: cleverbank_postgresql:1.0.0
+    restart: always
+    env_file:
+      - postgresql/db.env
+    ports:
+      - "5435:5432"
+  pgadmin:
+    build: pgadmin
+    image: finance_pgadmin:1.0.0
+    restart: always
+    env_file:
+      - pgadmin/pgadmin.env
+    ports:
+      - "82:80"
+    depends_on:
+      - db
+
+  cleverbank:
+    build: app
+    image: cleverbank-application:1.0.0
+    depends_on:
+      - db
+    stdin_open: true
+    tty: true
