@@ -3,6 +3,9 @@ package by.toukach.cleverbank.exception;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+/**
+ * Класс, содержащий сообщения об ошибках.
+ * */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ExceptionMessage {
 

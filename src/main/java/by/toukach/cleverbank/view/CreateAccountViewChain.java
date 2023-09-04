@@ -6,6 +6,9 @@ import java.util.Scanner;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+/**
+ * Класс для вывода формы по созданию счета в консоль.
+ * */
 @NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
 public class CreateAccountViewChain extends AccountViewChain {
 

@@ -10,6 +10,9 @@ import by.toukach.cleverbank.service.AuthService;
 import by.toukach.cleverbank.service.UserService;
 import java.time.LocalDateTime;
 
+/**
+ * Класс для аутентификации пользователей.
+ * */
 public class AuthServiceImpl implements AuthService {
 
   private static final AuthService instance = new AuthServiceImpl();

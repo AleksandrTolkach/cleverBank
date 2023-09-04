@@ -11,9 +11,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import javax.sql.DataSource;
 
+/**
+ * Класс для выполнения запросов, связанных с пользователями, в базу.
+ * */
 public class UserRepositoryImpl implements UserRepository {
 
   private static final UserRepository instance = new UserRepositoryImpl();

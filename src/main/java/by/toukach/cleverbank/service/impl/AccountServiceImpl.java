@@ -5,7 +5,7 @@ import by.toukach.cleverbank.dao.converter.Converter;
 import by.toukach.cleverbank.dao.converter.impl.AccountConverter;
 import by.toukach.cleverbank.dto.AccountDto;
 import by.toukach.cleverbank.exception.ExceptionMessage;
-import by.toukach.cleverbank.exception.UpdateObjectException;
+import by.toukach.cleverbank.exception.UpdateEntityException;
 import by.toukach.cleverbank.repository.AccountRepository;
 import by.toukach.cleverbank.repository.impl.AccountRepositoryImpl;
 import by.toukach.cleverbank.service.AccountService;
@@ -13,6 +13,9 @@ import java.sql.Connection;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Класс для выполнения операций со счетом.
+ * */
 public class AccountServiceImpl implements AccountService {
 
   private static final AccountService instance = new AccountServiceImpl();
@@ -58,7 +61,7 @@ public class AccountServiceImpl implements AccountService {
   public AccountDto update(AccountDto accountDto, Connection connection) {
     Account account = accountConverter.toEntity(accountDto);
     if (!accountDto.getUpdatedAt().equals(account.getUpdatedAt())) {
-      throw new UpdateObjectException(ExceptionMessage.ENTITY_UPDATE_MESSAGE);
+      throw new UpdateEntityException(ExceptionMessage.ENTITY_UPDATE_MESSAGE);
     }
     account = accountRepository.update(account, connection);
     return accountConverter.toDto(account);

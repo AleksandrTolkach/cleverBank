@@ -16,6 +16,9 @@ import by.toukach.cleverbank.service.impl.TransactionServiceImpl;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+/**
+ * Класс представляющий обработчик транзакций по списанию средств.
+ * */
 public class SpendTransactionHandlerImpl implements TransactionHandler {
 
   private final TransactionService transactionService = TransactionServiceImpl.getInstance();

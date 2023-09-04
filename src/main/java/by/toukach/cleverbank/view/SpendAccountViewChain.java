@@ -9,6 +9,9 @@ import by.toukach.cleverbank.exception.InsufficientFundsException;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 
+/**
+ * Класс для вывода формы по списанию средств в консоль.
+ * */
 public class SpendAccountViewChain extends TransactionViewChain {
 
   public SpendAccountViewChain(AccountDto accountDto, UserDto userDto) {

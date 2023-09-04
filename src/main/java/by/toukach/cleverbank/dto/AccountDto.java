@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Data;
 
+/**
+ * Класс представляющий DTO для счета в банке.
+ * */
 @Data
 @Builder
 public class AccountDto {

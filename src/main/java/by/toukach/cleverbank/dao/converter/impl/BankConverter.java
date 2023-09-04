@@ -6,17 +6,20 @@ import by.toukach.cleverbank.dto.BankDto;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+/**
+ * Класс для конвертации Bank из DTO в DAO и обратно.
+ * */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BankConverter implements Converter<BankDto, Bank> {
 
   private static final Converter<BankDto, Bank> instance = new BankConverter();
 
   @Override
-  public BankDto toDto(Bank entity) {
+  public BankDto toDto(Bank dao) {
     return BankDto.builder()
-        .id(entity.getId())
-        .createdAt(entity.getCreatedAt())
-        .name(entity.getName())
+        .id(dao.getId())
+        .createdAt(dao.getCreatedAt())
+        .name(dao.getName())
         .build();
   }
 

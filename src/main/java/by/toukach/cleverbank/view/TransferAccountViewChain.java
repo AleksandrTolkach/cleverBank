@@ -11,6 +11,9 @@ import by.toukach.cleverbank.exception.TransferException;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 
+/**
+ * Класс для вывода формы по переводу средств в консоль.
+ * */
 public class TransferAccountViewChain extends TransactionViewChain {
 
   public TransferAccountViewChain(AccountDto accountDto, UserDto userDto) {

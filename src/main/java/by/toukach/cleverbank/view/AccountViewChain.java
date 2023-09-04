@@ -4,6 +4,9 @@ import by.toukach.cleverbank.dto.AccountDto;
 import by.toukach.cleverbank.service.AccountService;
 import by.toukach.cleverbank.service.impl.AccountServiceImpl;
 
+/**
+ * Класс для вывода формы с данными о счете в консоль.
+ * */
 public abstract class AccountViewChain extends ViewChain {
 
   private final AccountService accountService = AccountServiceImpl.getInstance();

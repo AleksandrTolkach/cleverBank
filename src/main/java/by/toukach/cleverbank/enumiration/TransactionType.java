@@ -1,7 +1,9 @@
 package by.toukach.cleverbank.enumiration;
 
+/**
+ * Перечисление возможных операций в банке.
+ * */
 public enum TransactionType {
-
   SPEND("Списание"),
   RECEIVE("Получение"),
   TRANSFER("Перевод");

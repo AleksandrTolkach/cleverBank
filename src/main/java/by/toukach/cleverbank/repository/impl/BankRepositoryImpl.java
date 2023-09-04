@@ -13,6 +13,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.sql.DataSource;
 
+/**
+ * Класс для выполнения запросов, связанных с банков, в базу.
+ * */
 public class BankRepositoryImpl implements BankRepository {
 
   private static final BankRepository instance = new BankRepositoryImpl();

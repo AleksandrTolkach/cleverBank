@@ -14,6 +14,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import javax.sql.DataSource;
 
+/**
+ * Класс для выполнения запросов, связанных с операциями, в базу.
+ * */
 public class TransactionRepositoryImpl implements TransactionRepository {
 
   private static final TransactionRepository instance = new TransactionRepositoryImpl();

@@ -8,6 +8,9 @@ import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+/**
+ * Класс для создания Account DAO из ResultSet.
+ * */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AccountMapper implements RowMapper<Account> {
 

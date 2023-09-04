@@ -16,6 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.sql.DataSource;
 
+/**
+ * Класс для выполнения запросов, связанных со счетом, в базу.
+ * */
 public class AccountRepositoryImpl implements AccountRepository {
 
   private static final AccountRepository instance = new AccountRepositoryImpl();

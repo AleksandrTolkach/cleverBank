@@ -12,6 +12,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Класс для выполнения операций с чеком.
+ * */
 public class CheckServiceImpl implements CheckService {
 
   private static final CheckService instance = new CheckServiceImpl();

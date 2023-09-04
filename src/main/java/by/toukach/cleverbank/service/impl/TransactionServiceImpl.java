@@ -11,6 +11,9 @@ import by.toukach.cleverbank.service.TransactionService;
 import java.sql.Connection;
 import java.time.LocalDateTime;
 
+/**
+ * Класс для выполнения операций с Transaction.
+ * */
 public class TransactionServiceImpl implements TransactionService {
 
   private static final TransactionService instance = new TransactionServiceImpl();

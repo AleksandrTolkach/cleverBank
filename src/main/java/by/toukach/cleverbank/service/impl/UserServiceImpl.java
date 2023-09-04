@@ -12,6 +12,9 @@ import by.toukach.cleverbank.service.UserService;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Класс для выполнения операция с пользователями.
+ * */
 public class UserServiceImpl implements UserService {
 
   private static final UserService instance = new UserServiceImpl();

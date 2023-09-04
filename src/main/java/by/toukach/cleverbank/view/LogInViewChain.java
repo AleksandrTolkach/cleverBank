@@ -9,6 +9,9 @@ import by.toukach.cleverbank.service.AuthService;
 import by.toukach.cleverbank.service.impl.AuthServiceImpl;
 import java.util.Scanner;
 
+/**
+ * Класс для вывода формы входа в консоль.
+ * */
 public class LogInViewChain extends ViewChain {
 
   private final AuthService authService;
@@ -31,7 +34,6 @@ public class LogInViewChain extends ViewChain {
     try {
       UserDto userDto = authService.logIn(logInDtoBuilder.build());
       setUserDto(userDto);
-      System.out.println(getUserDto());
       setNextView(new AccountActionViewChain(getUserDto()));
     } catch (EntityNotFoundException e) {
       System.out.println(ExceptionMessage.WRONG_LOGIN_OR_PASSWORD_MESSAGE);

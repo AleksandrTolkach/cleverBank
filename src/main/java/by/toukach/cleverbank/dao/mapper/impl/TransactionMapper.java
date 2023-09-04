@@ -9,6 +9,9 @@ import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+/**
+ * Класс для создания Transaction DAO из ResultSet.
+ * */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TransactionMapper implements RowMapper<Transaction> {
 

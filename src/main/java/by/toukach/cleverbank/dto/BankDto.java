@@ -1,10 +1,12 @@
 package by.toukach.cleverbank.dto;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import lombok.Builder;
 import lombok.Data;
 
+/**
+ * Класс представляющий DTO для банка.
+ * */
 @Data
 @Builder
 public class BankDto {

@@ -7,6 +7,9 @@ import by.toukach.cleverbank.service.AuthService;
 import by.toukach.cleverbank.service.impl.AuthServiceImpl;
 import java.util.Scanner;
 
+/**
+ * Класс для вывода формы регистрации в консоль.
+ * */
 public class SignUpViewChain extends ViewChain {
 
   private final AuthService authService;
@@ -31,7 +34,6 @@ public class SignUpViewChain extends ViewChain {
 
     try {
       setUserDto(authService.signUp(signUpDtoBuilder.build()));
-      System.out.println(getUserDto());
       setNextView(new AccountActionViewChain(getUserDto()));
     } catch (UserDuplicateException e) {
       System.out.println(e.getMessage());

@@ -1,5 +1,5 @@
 plugins {
-    id 'java'
+    id 'application'
 }
 
 group 'by.toukach'
@@ -15,6 +15,7 @@ dependencies {
     implementation 'org.postgresql:postgresql:42.6.0'
     implementation 'com.mchange:c3p0:0.9.5.5'
     implementation 'org.yaml:snakeyaml:1.27'
+    implementation 'ch.qos.logback:logback-classic:1.2.3'
 
     compileOnly 'org.projectlombok:lombok:1.18.20'
     annotationProcessor 'org.projectlombok:lombok:1.18.20'
@@ -22,4 +23,17 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+application {
+    mainClassName = 'by.toukach.cleverbank.Main'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'by.toukach.cleverbank.Main'
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }

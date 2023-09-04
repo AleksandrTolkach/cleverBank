@@ -6,6 +6,9 @@ import by.toukach.cleverbank.service.handler.TransactionHandlerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Класс представляет фабрику, ответственную за создание TransactionHandler.
+ * */
 public class TransactionHandlerFactoryImpl implements TransactionHandlerFactory {
 
   private static final TransactionHandlerFactory instance = new TransactionHandlerFactoryImpl();

@@ -20,6 +20,9 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import org.yaml.snakeyaml.Yaml;
 
+/**
+ * Класс для выполнения операций с процентами.
+ * */
 public class PercentageServiceImpl implements PercentageService {
 
   private static final PercentageService instance = new PercentageServiceImpl();

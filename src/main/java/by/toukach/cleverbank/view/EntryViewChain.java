@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+/**
+ * Класс для вывода начальной формы в консоль.
+ * */
 public class EntryViewChain extends ViewChain {
 
   private final Map<Integer, ViewChain> viewChainMap = new HashMap<>();
@@ -17,7 +20,7 @@ public class EntryViewChain extends ViewChain {
   @Override
   public void handle() {
     System.out.println(ViewMessage.ENTRY_MESSAGE);
-    Scanner scanner = getScanner();
+    Scanner scanner = new Scanner(System.in);
 
     int answer = scanner.nextInt();
     scanner.nextLine();

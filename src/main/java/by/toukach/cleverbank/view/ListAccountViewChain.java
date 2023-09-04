@@ -7,6 +7,9 @@ import java.util.Scanner;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+/**
+ * Класс для вывода формы со списком счетов в консоль.
+ * */
 @NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
 public class ListAccountViewChain extends AccountViewChain {
 

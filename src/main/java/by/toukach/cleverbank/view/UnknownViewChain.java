@@ -1,5 +1,8 @@
 package by.toukach.cleverbank.view;
 
+/**
+ * Класс для вывода формы о некорректности вводных данных в консоль.
+ * */
 public class UnknownViewChain extends ViewChain {
 
   public UnknownViewChain(ViewChain viewChain) {

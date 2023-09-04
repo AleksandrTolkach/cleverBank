@@ -8,6 +8,9 @@ import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+/**
+ * Класс для создания Bank DAO из ResultSet.
+ * */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BankMapper implements RowMapper<Bank> {
 

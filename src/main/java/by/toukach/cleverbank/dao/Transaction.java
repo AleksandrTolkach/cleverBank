@@ -5,6 +5,9 @@ import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Data;
 
+/**
+ * Класс представляющий DAO для операции.
+ * */
 @Data
 @Builder
 public class Transaction {

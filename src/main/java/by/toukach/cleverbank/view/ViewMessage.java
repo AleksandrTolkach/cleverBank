@@ -3,6 +3,9 @@ package by.toukach.cleverbank.view;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+/**
+ * Класс, содержащий сообщения для форм.
+ * */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ViewMessage {
 

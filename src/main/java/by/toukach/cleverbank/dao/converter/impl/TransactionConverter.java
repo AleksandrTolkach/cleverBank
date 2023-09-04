@@ -6,22 +6,25 @@ import by.toukach.cleverbank.dto.TransactionDto;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+/**
+ * Класс для конвертации Transaction из DTO в DAO и обратно.
+ * */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TransactionConverter implements Converter<TransactionDto, Transaction> {
 
   private static final Converter<TransactionDto, Transaction> instance = new TransactionConverter();
 
   @Override
-  public TransactionDto toDto(Transaction entity) {
+  public TransactionDto toDto(Transaction dao) {
     return TransactionDto.builder()
-        .id(entity.getId())
-        .date(entity.getDate())
-        .type(entity.getType())
-        .senderBankId(entity.getSenderBankId())
-        .receiverBankId(entity.getReceiverBankId())
-        .senderAccountId(entity.getSenderAccountId())
-        .receiverAccountId(entity.getReceiverAccountId())
-        .value(entity.getValue())
+        .id(dao.getId())
+        .date(dao.getDate())
+        .type(dao.getType())
+        .senderBankId(dao.getSenderBankId())
+        .receiverBankId(dao.getReceiverBankId())
+        .senderAccountId(dao.getSenderAccountId())
+        .receiverAccountId(dao.getReceiverAccountId())
+        .value(dao.getValue())
         .build();
   }
 

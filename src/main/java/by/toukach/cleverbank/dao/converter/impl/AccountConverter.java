@@ -6,20 +6,23 @@ import by.toukach.cleverbank.dto.AccountDto;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+/**
+ * Класс для конвертации Account из DTO в DAO и обратно.
+ * */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AccountConverter implements Converter<AccountDto, Account> {
 
   private static final Converter<AccountDto, Account> instance = new AccountConverter();
 
   @Override
-  public AccountDto toDto(Account entity) {
+  public AccountDto toDto(Account dao) {
     return AccountDto.builder()
-        .id(entity.getId())
-        .createdAt(entity.getCreatedAt())
-        .updatedAt(entity.getUpdatedAt())
-        .title(entity.getTitle())
-        .bankId(entity.getBankId())
-        .sum(entity.getSum())
+        .id(dao.getId())
+        .createdAt(dao.getCreatedAt())
+        .updatedAt(dao.getUpdatedAt())
+        .title(dao.getTitle())
+        .bankId(dao.getBankId())
+        .sum(dao.getSum())
         .build();
   }
 

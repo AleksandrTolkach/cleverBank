@@ -5,6 +5,9 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Data;
 
+/**
+ * Класс представляющий DTO для пользователя.
+ * */
 @Data
 @Builder
 public class UserDto {

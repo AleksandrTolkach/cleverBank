@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+/**
+ * Класс для вывода формы со списком действий в консоль.
+ * */
 public class AccountActionViewChain extends ViewChain {
 
   private final Map<Integer, ViewChain> viewChainMap = new HashMap<>();

@@ -5,10 +5,12 @@ import by.toukach.cleverbank.dto.TransactionDto;
 import by.toukach.cleverbank.dto.UserDto;
 import by.toukach.cleverbank.enumiration.TransactionType;
 import by.toukach.cleverbank.exception.ArgumentValueException;
-import by.toukach.cleverbank.exception.ExceptionMessage;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 
+/**
+ * Класс для вывода формы по начислению средств в консоль.
+ * */
 public class ReceiveAccountViewChain extends TransactionViewChain {
 
   public ReceiveAccountViewChain(AccountDto accountDto, UserDto userDto) {

@@ -8,6 +8,9 @@ import by.toukach.cleverbank.repository.BankRepository;
 import by.toukach.cleverbank.repository.impl.BankRepositoryImpl;
 import by.toukach.cleverbank.service.BankService;
 
+/**
+ * Класс для выполнения операций с банками.
+ * */
 public class BankServiceImpl implements BankService {
 
   private static final BankService instance = new BankServiceImpl();
